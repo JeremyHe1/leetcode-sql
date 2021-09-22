@@ -75,3 +75,9 @@ Horse Riding activity is performed by 1 friend, minimum number of participants, 
 Singing is performed by 2 friends (Victor J. and Jade W.)
 
 select t.name as activity from (select a.name, rank() over(order by count(f.activity)) as ra, rank() over(order by count(f.activity) desc) as rd from Activities a left join Friends f on a.name = f.activity group by a.name) t where t.ra != 1 and t.rd != 1
+
+select activity
+from Friends
+group by activity
+having count(id) != (select count(id) from Friends group by activity order by count(id) desc limit 1)
+and count(id) != (select count(id) from Friends group by activity order by count(id) limit 1)
